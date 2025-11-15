@@ -13,6 +13,7 @@
 	<name>Explore With Me</name>
     <modules>
         <module>ewm-stats</module>
+        <module>ewm-service</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
@@ -27,7 +28,8 @@
         <spring.version>3.3.2</spring.version>
         <jakarta.validation.version>3.1.1</jakarta.validation.version>
         <postgres.version>42.7.8</postgres.version>
-        <dto.version>0.0.1-SNAPSHOT</dto.version>
+        <querydsl.version>5.1.0</querydsl.version>
+        <practicum.version>0.0.1-SNAPSHOT</practicum.version>
 	</properties>
 
     <dependencyManagement>
@@ -55,6 +57,31 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgres.version}</version>
             </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>3.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+                <classifier>jakarta</classifier>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.persistence</groupId>
+                        <artifactId>javax.persistence-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+                <classifier>jakarta</classifier>
+                <scope>provided</scope>
+            </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -72,7 +99,13 @@
             <dependency>
                 <groupId>ru.practicum</groupId>
                 <artifactId>dto</artifactId>
-                <version>${dto.version}</version>
+                <version>${practicum.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.practicum</groupId>
+                <artifactId>client</artifactId>
+                <version>${practicum.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

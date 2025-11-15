@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
+import ru.practicum.stats.exception.BadRequestException;
 import ru.practicum.stats.model.EndpointHit;
 import ru.practicum.stats.repository.EndpointHitRepository;
 import ru.practicum.stats.service.StatsService;
@@ -34,6 +35,10 @@ public class StatsServiceImpl implements StatsService {
 
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        if (start.isAfter(end)) {
+            throw new BadRequestException("Start date should be before end date");
+        }
+
         if (unique) {
             return repository.findUniqueStats(start, end, uris);
         }
