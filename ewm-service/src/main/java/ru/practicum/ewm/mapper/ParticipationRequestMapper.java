@@ -1,9 +1,11 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.model.ParticipationRequest;
 import ru.practicum.ewm.util.DateTimeUtil;
 
+@UtilityClass
 public final class ParticipationRequestMapper {
 
     public static ParticipationRequestDto toDto(ParticipationRequest pr) {

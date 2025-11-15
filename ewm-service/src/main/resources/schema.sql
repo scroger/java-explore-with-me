@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS comments;
+DROP TYPE IF EXISTS comment_status;
 DROP TABLE IF EXISTS compilation_events;
 DROP TABLE IF EXISTS compilations;
 DROP TABLE IF EXISTS participation_requests;
@@ -65,4 +67,18 @@ CREATE TABLE compilation_events
     compilation_id BIGINT NOT NULL REFERENCES compilations (id) ON DELETE CASCADE,
     event_id       BIGINT NOT NULL REFERENCES events (id) ON DELETE CASCADE,
     PRIMARY KEY (compilation_id, event_id)
+);
+
+CREATE TYPE comment_status AS ENUM ('PENDING','APPROVED','REJECTED');
+
+CREATE TABLE comments
+(
+    id        BIGSERIAL PRIMARY KEY,
+    text      VARCHAR(2000)  NOT NULL,
+    created   TIMESTAMP      NOT NULL DEFAULT NOW(),
+    updated   TIMESTAMP,
+    status    comment_status NOT NULL DEFAULT 'PENDING',
+    author_id BIGINT         NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    event_id  BIGINT         NOT NULL REFERENCES events (id) ON DELETE CASCADE,
+    version   BIGINT         NOT NULL DEFAULT 0
 );

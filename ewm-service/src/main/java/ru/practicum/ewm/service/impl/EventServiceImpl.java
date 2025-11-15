@@ -56,6 +56,7 @@ public class EventServiceImpl implements EventService {
     private final JPAQueryFactory jpaQueryFactory;
     private final StatsClient statsClient;
 
+    @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getPublicEvents(EventFilterDto filter, Pageable pageable, HttpServletRequest httpReq) {
         statsClient.hit(APP, "/events", httpReq.getRemoteAddr());
@@ -91,6 +92,7 @@ public class EventServiceImpl implements EventService {
                 .toList();
     }
 
+    @Override
     @Transactional(readOnly = true)
     public EventFullDto getPublicEvent(Long id, HttpServletRequest httpReq) {
         statsClient.hit(APP, "/events/" + id, httpReq.getRemoteAddr());
@@ -113,6 +115,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toFullDto(event, views, confirmed);
     }
 
+    @Override
     @Transactional
     public EventFullDto createEvent(Long userId, NewEventDto dto) {
         User user = userRepository.findById(userId)
@@ -131,6 +134,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toFullDto(saved, 0L, 0L);
     }
 
+    @Override
     @Transactional
     public EventFullDto updateOwnEvent(Long userId, Long eventId, UpdateEventUserRequest dto) {
         Event event = eventRepository.findById(eventId)
@@ -182,6 +186,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toFullDto(event, 0L, 0L);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getMyEvents(Long userId, Pageable pageable) {
         QEvent e = QEvent.event;
@@ -216,6 +221,7 @@ public class EventServiceImpl implements EventService {
                 .toList();
     }
 
+    @Override
     @Transactional(readOnly = true)
     public EventFullDto getOwnEvent(Long userId, Long eventId) {
         Event ev = eventRepository.findById(eventId)
@@ -229,6 +235,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toFullDto(ev, 0L, confirmed);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<EventFullDto> adminSearch(EventAdminFilterDto filter, Pageable pageable) {
         List<Event> events = eventCustomRepository.adminSearch(filter, pageable);
@@ -255,6 +262,7 @@ public class EventServiceImpl implements EventService {
                 .toList();
     }
 
+    @Override
     @Transactional
     public EventFullDto adminUpdate(Long eventId, UpdateEventAdminRequest dto) {
         Event ev = eventRepository.findById(eventId)

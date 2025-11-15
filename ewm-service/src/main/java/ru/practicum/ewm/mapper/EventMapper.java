@@ -2,6 +2,7 @@ package ru.practicum.ewm.mapper;
 
 import java.util.Optional;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.EventShortDto;
 import ru.practicum.ewm.dto.NewEventDto;
@@ -11,6 +12,7 @@ import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.util.DateTimeUtil;
 
+@UtilityClass
 public final class EventMapper {
 
     public static EventShortDto toShortDto(Event event, long views, long confirmed) {
