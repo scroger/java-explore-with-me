@@ -1,9 +1,9 @@
 server:
-  port: 9090
+  port: 8080
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ewm_stats}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ewm_service}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -17,6 +17,10 @@ spring:
   sql:
     init:
       mode: always
+
+stats:
+  service:
+    url: ${STATS_SERVICE_URL:http://localhost:9090}
 
 logging:
   level:
