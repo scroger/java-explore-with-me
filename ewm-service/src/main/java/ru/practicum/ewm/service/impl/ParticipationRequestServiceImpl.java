@@ -141,8 +141,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             }
         }
 
-        participationRequestRepository.saveAll(requests);
-
         long confirmedNow = participationRequestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
         if (ev.getParticipantLimit() > 0 && confirmedNow >= ev.getParticipantLimit()) {
             List<ParticipationRequest> pending = participationRequestRepository.findAllByEventIdAndStatus(
@@ -153,8 +151,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 p.setStatus(RequestStatus.REJECTED);
                 rejected.add(ParticipationRequestMapper.toDto(p));
             }
-
-            participationRequestRepository.saveAll(pending);
         }
 
         return EventRequestStatusUpdateResult.builder()
@@ -178,9 +174,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         }
 
         pr.setStatus(RequestStatus.CANCELED);
-        ParticipationRequest saved = participationRequestRepository.save(pr);
-
-        return ParticipationRequestMapper.toDto(saved);
+        return ParticipationRequestMapper.toDto(pr);
     }
 
 }

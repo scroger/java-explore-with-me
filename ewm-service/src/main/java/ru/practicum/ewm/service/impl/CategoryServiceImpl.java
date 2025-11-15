@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.NewCategoryDto;
@@ -26,7 +25,7 @@ import ru.practicum.ewm.service.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     @Transactional
@@ -52,9 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         cat.setName(dto.name());
-        Category saved = categoryRepository.save(cat);
 
-        return CategoryMapper.toDto(saved);
+        return CategoryMapper.toDto(cat);
     }
 
     @Override
@@ -64,8 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new NotFoundException("Category not found"));
 
         QEvent e = QEvent.event;
-        long count = new JPAQueryFactory(entityManager)
-                .selectFrom(e)
+        long count = jpaQueryFactory.selectFrom(e)
                 .where(e.category.id.eq(catId))
                 .fetchCount();
         if (count > 0) {

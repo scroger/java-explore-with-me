@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.client.StatsClient;
@@ -54,7 +53,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final ParticipationRequestRepository participationRequestRepository;
-    private final EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
     private final StatsClient statsClient;
 
     @Transactional(readOnly = true)
@@ -180,8 +179,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        Event saved = eventRepository.save(event);
-        return EventMapper.toFullDto(saved, 0L, 0L);
+        return EventMapper.toFullDto(event, 0L, 0L);
     }
 
     @Transactional(readOnly = true)
@@ -190,8 +188,7 @@ public class EventServiceImpl implements EventService {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(e.initiator.id.eq(userId));
 
-        JPAQueryFactory qf = new JPAQueryFactory(entityManager);
-        List<Event> events = qf.selectFrom(e)
+        List<Event> events = jpaQueryFactory.selectFrom(e)
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -309,8 +306,7 @@ public class EventServiceImpl implements EventService {
         if (null != dto.participantLimit()) ev.setParticipantLimit(dto.participantLimit());
         if (null != dto.requestModeration()) ev.setRequestModeration(dto.requestModeration());
 
-        Event saved = eventRepository.save(ev);
-        return EventMapper.toFullDto(saved, 0L, 0L);
+        return EventMapper.toFullDto(ev, 0L, 0L);
     }
 
 }

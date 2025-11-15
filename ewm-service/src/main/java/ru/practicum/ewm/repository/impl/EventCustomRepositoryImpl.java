@@ -11,7 +11,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import ru.practicum.ewm.dto.EventAdminFilterDto;
 import ru.practicum.ewm.dto.EventFilterDto;
 import ru.practicum.ewm.enums.EventState;
@@ -22,13 +22,10 @@ import ru.practicum.ewm.model.QParticipationRequest;
 import ru.practicum.ewm.repository.EventCustomRepository;
 
 @Repository
+@RequiredArgsConstructor
 public class EventCustomRepositoryImpl implements EventCustomRepository {
 
-    private final JPAQueryFactory qf;
-
-    public EventCustomRepositoryImpl(EntityManager em) {
-        this.qf = new JPAQueryFactory(em);
-    }
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<Event> findPublicEvents(EventFilterDto filter, Pageable pageable) {
@@ -71,7 +68,7 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
                 : Order.ASC)
                 : Order.ASC;
 
-        return qf.selectFrom(QEvent.event)
+        return jpaQueryFactory.selectFrom(QEvent.event)
                 .where(builder)
                 .orderBy(Order.ASC == order
                         ? QEvent.event.eventDate.asc()
@@ -114,12 +111,12 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
         }
         builder.and(QEvent.event.state.eq(EventState.PUBLISHED));
 
-        return qf.selectFrom(QEvent.event).where(builder).fetchCount();
+        return jpaQueryFactory.selectFrom(QEvent.event).where(builder).fetchCount();
     }
 
     @Override
     public Optional<Event> findByIdAndState(Long id, EventState state) {
-        Event ev = qf.selectFrom(QEvent.event)
+        Event ev = jpaQueryFactory.selectFrom(QEvent.event)
                 .where(QEvent.event.id.eq(id).and(QEvent.event.state.eq(state)))
                 .fetchOne();
         return Optional.ofNullable(ev);
@@ -147,7 +144,7 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
             builder.and(QEvent.event.eventDate.loe(filter.rangeEnd()));
         }
 
-        return qf.selectFrom(QEvent.event)
+        return jpaQueryFactory.selectFrom(QEvent.event)
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -176,6 +173,6 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
             builder.and(QEvent.event.eventDate.loe(filter.rangeEnd()));
         }
 
-        return qf.selectFrom(QEvent.event).where(builder).fetchCount();
+        return jpaQueryFactory.selectFrom(QEvent.event).where(builder).fetchCount();
     }
 }

@@ -60,12 +60,11 @@ public class CompilationServiceImpl implements CompilationService {
             comp.setEvents(events);
         }
 
-        Compilation saved = compilationRepository.save(comp);
-        List<EventShortDto> eventDtos = saved.getEvents().stream()
+        List<EventShortDto> eventDtos = comp.getEvents().stream()
                 .map(ev -> EventMapper.toShortDto(ev, 0L, 0L))
                 .toList();
 
-        return CompilationMapper.toDto(saved, eventDtos);
+        return CompilationMapper.toDto(comp, eventDtos);
     }
 
     @Override
