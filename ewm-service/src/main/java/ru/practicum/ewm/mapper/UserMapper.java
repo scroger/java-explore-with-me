@@ -1,9 +1,11 @@
 package ru.practicum.ewm.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.dto.UserDto;
 import ru.practicum.ewm.dto.UserShortDto;
 import ru.practicum.ewm.model.User;
 
+@UtilityClass
 public final class UserMapper {
     public static UserDto toDto(User entity) {
         return UserDto.builder()

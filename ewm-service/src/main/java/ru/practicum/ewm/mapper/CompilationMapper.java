@@ -3,12 +3,14 @@ package ru.practicum.ewm.mapper;
 import java.util.List;
 import java.util.Set;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.dto.CompilationDto;
 import ru.practicum.ewm.dto.EventShortDto;
 import ru.practicum.ewm.dto.NewCompilationDto;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
 
+@UtilityClass
 public final class CompilationMapper {
 
     public static CompilationDto toDto(Compilation comp, List<EventShortDto> eventDtos) {
